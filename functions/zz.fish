@@ -1,10 +1,15 @@
 function zz -d "List Z jump options in fzf" -a dir
-    eval "z -l | fzf --height=10 --reverse --query '$dir'" \
-    | read -l output
+    eval "z -l \
+    | awk -F ' ' '{print \$2}' \
+    | fzf --height=10 --reverse --query '$dir'\
+    --preview 'ls --color=always {}'" \
+    | read -l target_dir
 
-    set target_dir (echo "$output" | awk -F ' ' '{print $2}')
-
-    if test -n $target_dir
+    if not test -z "$target_dir"
         cd "$target_dir"
+
+        commandline -t ""
     end
+
+    commandline -f repaint
 end
