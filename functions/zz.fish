@@ -1,5 +1,6 @@
 function zz -d "List Z jump options in fzf" -a dir
     eval "z -l \
+    | sort -k1 -nr \
     | awk -F ' ' '{print \$2}' \
     | fzf --height=10 --reverse --query '$dir'\
     --preview 'ls --color=always {}'" \
